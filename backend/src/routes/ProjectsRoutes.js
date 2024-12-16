@@ -9,11 +9,11 @@ router.post('/create', async (req, res) => {
     //     "description": "project34 title"
     // }
     console.log("/create hit");
-    const {id, title, description} = req.body;
+    const {projectId, title, description} = req.body;
     const username = req.user;
     try {
         const newProject = new Project({
-            projectId:id,
+            projectId:projectId,
             owner: username,
             title: title,
             description: description,

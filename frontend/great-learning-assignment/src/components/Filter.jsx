@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-export default function Filter({list, setFilteredProjects, of}) {
+export default function Filter({list, setFilteredProjects, filteredList, of}) {
     //controlled components
+    let dateRef = useRef(null);
+    let userRef = useRef(null);
     let [date, setDate] = useState("");
     let [user, setUser] = useState("");
     let dateWord = "";
@@ -14,32 +16,49 @@ export default function Filter({list, setFilteredProjects, of}) {
        userWord = "assignedUser"; 
     }
 
-    let handleFilter = ()=>{
+    let handleClear = ()=>{
+        console.log("handle clear");
+        setDate("");
+        setUser("");
+        setFilteredProjects(list);
+        dateRef.current.value = "select";
+        userRef.current.value = "select";
         //get list from parent and filter based on (creationDate|Deadline)(Owner|AsssignedUser)
     }
 
     useEffect(()=>{
-        let filteredList = [];
+        let fL = [];
         if(user){
-            filteredList = list.filter((ele)=>(
+            fL = filteredList.filter((ele)=>(
                 ele[userWord] === user
             ))
-            setFilteredProjects(filteredList);
+            setFilteredProjects(fL);
         }
-        //same for date
+        if(date){
+            fL = filteredList.filter((ele)=>(
+                ele[dateWord] === date 
+            ))
+            setFilteredProjects(fL);
+        }
     },[user,date]);
 
     return (
         <div>
             {/* handle the date functionaligy later */}
-            <input type="date" name="date" id="date" />
-            <select onChange={(e)=>{setUser(e.target.value)}} name="usrOwn" id="usrOwn">
+            {/* <input type="date" name="date" id="date" /> */}
+            <select ref={dateRef} onChange={(e)=>{setDate(e.target.value)}} name="date" id="date">
+                <option hidden value="select">select Date</option>
+                {list.map((ele, i) => (
+                    <option key={i} value={ele[dateWord]}>{ele[dateWord]}</option>
+                ))}
+            </select>
+            <select ref={userRef} onChange={(e)=>{setUser(e.target.value)}} name="usrOwn" id="usrOwn">
                 <option hidden value="select">selectoption</option>
                 {list.map((ele, i) => (
                     <option key={i} value={ele[userWord]}>{ele[userWord]}</option>
                 ))}
             </select>
-            <button>Clear</button>
+            <button onClick={handleClear}>Clear</button>
         </div>
     )
 }

@@ -7,7 +7,9 @@ router.post('/create', async (req, res) => {
     const { taskId, projectId, title, description, status, deadline, assignedUser } = req.body;
     const username = req.user;
     try {
+        console.log("projectId username: ",projectId,username);
         const project = await Project.findOne({ projectId, owner: username });
+        console.log("project: ",project);
         if (!project) {
             return res.status(403).json({ error: 'Unauthorized to create task for this project' });
         }
@@ -20,6 +22,7 @@ router.post('/create', async (req, res) => {
             deadline,
             assignedUser
         });
+        console.log("newtask: ",newTask);
         await newTask.save();
         res.status(201).json({ message: 'Task created successfully' });
     } catch (error) {

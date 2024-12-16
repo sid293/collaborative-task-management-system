@@ -12,6 +12,7 @@ export default function TasksList({list}) {
 
     useEffect(()=>{
         //In Progress  Pending Completed
+        console.log("useefect taskslist");
         let inProgress = [];
         let pending = [];
         let completed = [];
@@ -20,7 +21,7 @@ export default function TasksList({list}) {
                 case "In Progress":
                     inProgress.push(ele);
                     break;
-                case "Pending":
+                case "Todo":
                     pending.push(ele);
                     break;
                 case "Completed":
@@ -29,7 +30,7 @@ export default function TasksList({list}) {
             }
         });
         setSortedList((prev)=>({inProgress,todo:pending,completed}));
-    },[]);
+    },[list]);
 
   return (
     <div style={{
@@ -65,8 +66,7 @@ export default function TasksList({list}) {
                     padding:"0.5em",
                     margin:"0.5em"
                 }}>
-                    <h4>{ele.title}</h4>
-                    <p>{ele.description}</p>
+                    <h5>{ele.title}</h5>
                 </div>
             ))}
         </div>
@@ -82,28 +82,22 @@ export default function TasksList({list}) {
                     padding:"0.5em",
                     margin:"0.5em"
                 }}>
-                    <h4>{ele.title}</h4>
-                    <p>{ele.description}</p>
+                    <h5>{ele.title}</h5>
                 </div>
             ))}
         </div>
     {popup && 
         <div style={{
             position:"fixed",
-            border:"2px solid gray",
-            backgroundColor:"#333",
-            color:"#fff",
+            border:"1px solid blue",
+            backgroundColor:"gray",
             top:"30%",
             left:"30%",
             width:"50%",
             height:"50%",
-            padding:"1em"
         }}>
             <button onClick={()=>{setPopup(false)}} style={{
-                float:"right",
-                backgroundColor:"#333",
-                color:"#fff",
-                border:"none"
+                float:"right"
             }}>X</button>
             <p>{selectedTask.title}</p>
             <p>{selectedTask.description}</p>

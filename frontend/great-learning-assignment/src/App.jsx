@@ -35,6 +35,7 @@ function App() {
           let token = res.data.token; 
           sessionStorage.setItem('token', token);
           alert("Login successful");
+          localStorage.setItem("username",formData.username);
           navigator("/projects");
         } else {
           alert(`Fail: ${res.data.error}`);
@@ -47,8 +48,9 @@ function App() {
   }
 
   return (
-    <>
-      <div>
+    <div className="container">
+      <div className="header">
+        <h2>{currentPage}</h2>
         <button onClick={()=>{setCurrentPage((prev)=>{
           if(prev==="Login"){
             return "Register"
@@ -56,21 +58,24 @@ function App() {
           return "Login";
         })}}>{currentPage==="Login"?"Register":"Login"}</button>
       </div>
-      <h2>{currentPage}</h2>
       <form action="">
-        <label htmlFor="name">Name: </label>
-        <input id="name" type="text" value={formData.username} onChange={(e)=>{setFormData((prev)=>({...prev,username:e.target.value}))}} />
+        <div className="form-field">
+          <label htmlFor="name">Name: </label>
+          <input id="name" type="text" value={formData.username} onChange={(e)=>{setFormData((prev)=>({...prev,username:e.target.value}))}} />
+        </div>
         {currentPage === "Register" && 
-          <>
+          <div className="form-field">
             <label htmlFor="email">Email: </label>
             <input id="email" type="email" value={formData.email} onChange={(e)=>{setFormData((prev)=>({...prev,email:e.target.value}))}} />
-          </>
+          </div>
         }
-        <label htmlFor="password">Password: </label>
-        <input id="password" type="password" value={formData.password} onChange={(e)=>{setFormData((prev)=>({...prev,password:e.target.value}))}} />
-        <button onClick={handleSubmit} >Submit</button>
+        <div className="form-field">
+          <label htmlFor="password">Password: </label>
+          <input id="password" type="password" value={formData.password} onChange={(e)=>{setFormData((prev)=>({...prev,password:e.target.value}))}} />
+        </div>
+        <button onClick={handleSubmit} className="submit-btn">Submit</button>
       </form>
-    </>
+    </div>
   )
 }
 
